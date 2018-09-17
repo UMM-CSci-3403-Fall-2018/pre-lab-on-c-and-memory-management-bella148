@@ -60,6 +60,7 @@ int is_clean(char* str) {
   // We check if it's clean by calling strip and seeing if the
   // result is the same as the original string.
   cleaned = strip(str);
+  free(result)
 
   // strcmp compares two strings, returning a negative value if
   // the first is less than the second (in alphabetical order),
