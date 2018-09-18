@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+// Compile: gcc -g -Wall -o check_whitespace check_whitespace.c
+// Test: valgrind --leak-check=full ./check_whitespace
+
 /*
  * Strips spaces from both the front and back of a string,
  * leaving any internal spaces alone.
@@ -60,7 +63,6 @@ int is_clean(char* str) {
   // We check if it's clean by calling strip and seeing if the
   // result is the same as the original string.
   cleaned = strip(str);
-  free(result)
 
   // strcmp compares two strings, returning a negative value if
   // the first is less than the second (in alphabetical order),
@@ -68,6 +70,14 @@ int is_clean(char* str) {
   // greater than the second.
   result = strcmp(str, cleaned);
 
+  // At this point we no longer need to keep around the data stored. However there is a problem.
+  // If we try and free memory that is empty, the program will give an error. To fix this we simply check to see if the null terminator is the first entry.
+  // If the first entry isn't a null terminator we are free to clean the memory pointed to by cleaned.
+  if(cleaned[0] != '\0')
+  {
+    free(cleaned);
+  }
+  
   return result == 0;
 }
 
@@ -91,6 +101,5 @@ int main() {
       printf("The string '%s' is NOT clean.\n", strings[i]);
     }
   }
-
   return 0;
 }
